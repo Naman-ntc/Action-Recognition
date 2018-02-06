@@ -18,3 +18,4 @@ echo "IMPORTANT"
 echo "Make changes of line 78 of the program, change w to wb"
 nano ntu_gendata.py
 echo "Now pickling time!!"
+python ntu_gendata.py --data_path nturgb+d_skeletons --ignored_sample_path samples_with_missing_skeletons.txt --out_folder .
