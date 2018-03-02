@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 
 train_data = np.load(open('train_data.npy','rb'))
-train_labes = pickle.load(open('small_label.pkl','rb'))
+train_labes = pickle.load(open('train_label.pkl','rb'))
 
 train_data = train_data[np.asarray(train_labes[1])<49,:,:,:,0]
 train_labes = np.asarray(train_labes[1])
@@ -11,8 +11,8 @@ train_labes = train_labes[train_labes[1]<49]
 train_data = train_data - (train_data[:,:,0,0])[:,:,None,None]
 train_data = train_data / np.linalg.norm(train_data[:,:,0,1]-train_data[:,:,0,0],axis=1)[:,None,None,None]
 
-val_data = np.load(open('small_val.npy','rb'))
-val_labes = pickle.load(open('small_label.pkl','rb'))
+val_data = np.load(open('val_data.npy','rb'))
+val_labes = pickle.load(open('val_label.pkl','rb'))
 
 val_data = val_data[np.asarray(val_labes[1])<49,:,:,:,0]
 val_labes = np.asarray(val_labes[1])
