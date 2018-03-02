@@ -34,20 +34,29 @@ stupid_videos = stupid_videos[0:len(stupid_videos):3]
 
 train_data = np.load(open('train_data.npy','rb'))
 train_labes = pickle.load(open('train_label.pkl','rb'))
-
-non_stupid = np.setdiff1d(range(len(train_labes)),stupid_videos)
-
+print(train_data.shape)
+non_stupid = np.setdiff1d(range(len(train_labes[1])),stupid_videos)
+print(len(non_stupid))
 train_data = train_data[non_stupid,:,:,:,:]
-
-train_data = train_data[np.asarray(train_labes[1])<49,:,:,:,0]
+print(train_data.shape)
+print(len(train_labes[1]))
 train_labes = np.asarray(train_labes[1])
-
+print(train_labes.shape)
 train_labes = train_labes[non_stupid]
+train_data = train_data[np.asarray(train_labes)<49,:,:,:,0]
+print(train_data.shape)
+
+#train_labes = np.asarray(train_labes[1])
+
+#train_labes = train_labes[non_stupid]
 
 train_labes = train_labes[train_labes<49]
 
 train_data = train_data - (train_data[:,:,0,0])[:,:,None,None]
+print(train_data.shape)
+
 train_data = train_data / np.linalg.norm(train_data[:,:,0,1]-train_data[:,:,0,0],axis=1)[:,None,None,None]
+print(train_data.shape)
 
 
 #####################################################################################################################
@@ -68,23 +77,26 @@ stupid_videos = [491,   491,   491,   670,   670,   670,  1165,  1165,  1165,
        14766, 14766, 14766, 15100, 15100, 15100, 15251, 15251, 15251,
        15807, 15807, 15807, 16174, 16174, 16174]
 
-non_stupid = np.setdiff1d(range(len(val_labes)),stupid_videos)
+#non_stupid = np.setdiff1d(range(len(val_labes[1])),stupid_videos)
 
 val_data = np.load(open('val_data.npy','rb'))
 val_labes = pickle.load(open('val_label.pkl','rb'))
 
-non_stupid = np.setdiff1d(range(len(val_labes)),stupid_videos)
+non_stupid = np.setdiff1d(range(len(val_labes[1])),stupid_videos)
 
-
-val_data = val_data[np.asarray(val_labes[1])<49,:,:,:,0]
 val_labes = np.asarray(val_labes[1])
+val_labes = val_labes[non_stupid]
+
+val_data = val_data[np.asarray(val_labes)<49,:,:,:,0]
+
 val_labes = val_labes[val_labes<49]
 
 val_data = val_data - (val_data[:,:,0,0])[:,:,None,None]
 val_data = val_data / np.linalg.norm(val_data[:,:,0,1]-val_data[:,:,0,0],axis=1)[:,None,None,None]
 
-
+"""
 np.save('Final-Data/train_data.npy',train_data)
 np.save('Final-Data/train_labels.npy',train_labes)
 np.save('Final-Data/val_data.npy',val_data)
 np.save('Final-Data/val_labes.npy',val_labes)
+"""
