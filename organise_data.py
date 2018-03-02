@@ -1,7 +1,6 @@
 import numpy as np 
 import pickle
 
-
 ###############################################################################################################3
 stupid_videos = [  822,   822,   822,  1837,  1837,  1837,  2154,  2154,  2154,
         2596,  2596,  2596,  3761,  3761,  3761,  4153,  4153,  4153,
@@ -81,22 +80,26 @@ stupid_videos = [491,   491,   491,   670,   670,   670,  1165,  1165,  1165,
 
 val_data = np.load(open('val_data.npy','rb'))
 val_labes = pickle.load(open('val_label.pkl','rb'))
-
+print(val_data.shape)
+print(len(val_labes[1]))
 non_stupid = np.setdiff1d(range(len(val_labes[1])),stupid_videos)
 
 val_labes = np.asarray(val_labes[1])
 val_labes = val_labes[non_stupid]
+print(len(val_labes))
+val_data = val_data[non_stupid,:,:,:,:]
 
 val_data = val_data[np.asarray(val_labes)<49,:,:,:,0]
+print(val_data.shape)
 
 val_labes = val_labes[val_labes<49]
 
 val_data = val_data - (val_data[:,:,0,0])[:,:,None,None]
 val_data = val_data / np.linalg.norm(val_data[:,:,0,1]-val_data[:,:,0,0],axis=1)[:,None,None,None]
 
-"""
+
 np.save('Final-Data/train_data.npy',train_data)
 np.save('Final-Data/train_labels.npy',train_labes)
 np.save('Final-Data/val_data.npy',val_data)
 np.save('Final-Data/val_labes.npy',val_labes)
-"""
+
