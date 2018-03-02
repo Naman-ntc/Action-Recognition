@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 
 
-
+###############################################################################################################3
 stupid_videos = [  822,   822,   822,  1837,  1837,  1837,  2154,  2154,  2154,
         2596,  2596,  2596,  3761,  3761,  3761,  4153,  4153,  4153,
         4429,  4429,  4429,  4833,  4833,  4833,  5047,  5047,  5047,
@@ -32,11 +32,10 @@ stupid_videos = [  822,   822,   822,  1837,  1837,  1837,  2154,  2154,  2154,
 
 stupid_videos = stupid_videos[0:len(stupid_videos):3]
 
-non_stupid = np.setdiff1d(range(len(stupid_videos)),stupid_videos)
-
 train_data = np.load(open('train_data.npy','rb'))
 train_labes = pickle.load(open('train_label.pkl','rb'))
 
+non_stupid = np.setdiff1d(range(len(train_labes)),stupid_videos)
 
 train_data = train_data[non_stupid,:,:,:,:]
 
@@ -45,17 +44,41 @@ train_labes = np.asarray(train_labes[1])
 
 train_labes = train_labes[non_stupid]
 
-train_labes = train_labes[train_labes[1]<49]
+train_labes = train_labes[train_labes<49]
 
 train_data = train_data - (train_data[:,:,0,0])[:,:,None,None]
 train_data = train_data / np.linalg.norm(train_data[:,:,0,1]-train_data[:,:,0,0],axis=1)[:,None,None,None]
 
+
+#####################################################################################################################
+
+stupid_videos = [491,   491,   491,   670,   670,   670,  1165,  1165,  1165,
+        1297,  1297,  1297,  2371,  2371,  2371,  2742,  2742,  2742,
+        2920,  2920,  2920,  3098,  3098,  3098,  3182,  3182,  3182,
+        3382,  3382,  3382,  3624,  3624,  3624,  3963,  3963,  3963,
+        4030,  4030,  4030,  5149,  5149,  5149,  5804,  5804,  5804,
+        6747,  6747,  6747,  6807,  6807,  6807,  7073,  7073,  7073,
+        7323,  7323,  7323,  7355,  7355,  7355,  7697,  7697,  7697,
+        7966,  7966,  7966,  8075,  8075,  8075,  8167,  8167,  8167,
+        8570,  8570,  8570,  9306,  9306,  9306,  9626,  9626,  9626,
+       10156, 10156, 10156, 10569, 10569, 10569, 11095, 11095, 11095,
+       11241, 11241, 11241, 11418, 11418, 11418, 11620, 11620, 11620,
+       11688, 11688, 11688, 12129, 12129, 12129, 12644, 12644, 12644,
+       13503, 13503, 13503, 13735, 13735, 13735, 13856, 13856, 13856,
+       14766, 14766, 14766, 15100, 15100, 15100, 15251, 15251, 15251,
+       15807, 15807, 15807, 16174, 16174, 16174]
+
+non_stupid = np.setdiff1d(range(len(val_labes)),stupid_videos)
+
 val_data = np.load(open('val_data.npy','rb'))
 val_labes = pickle.load(open('val_label.pkl','rb'))
 
+non_stupid = np.setdiff1d(range(len(val_labes)),stupid_videos)
+
+
 val_data = val_data[np.asarray(val_labes[1])<49,:,:,:,0]
 val_labes = np.asarray(val_labes[1])
-val_labes = val_labes[val_labes[1]<49]
+val_labes = val_labes[val_labes<49]
 
 val_data = val_data - (val_data[:,:,0,0])[:,:,None,None]
 val_data = val_data / np.linalg.norm(val_data[:,:,0,1]-val_data[:,:,0,0],axis=1)[:,None,None,None]
