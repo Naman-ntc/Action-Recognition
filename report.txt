@@ -1,0 +1,3 @@
+I] Treating the data as an image (with one dimension being temporal)
+
+First we must have uniformity in the data so we chose one point (the hip joint) to be the origin (and then remove it from the data) and the joint above it to be unit distance from it. code is in file organise_data.py
