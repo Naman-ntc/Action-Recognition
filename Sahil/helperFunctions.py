@@ -7,13 +7,13 @@ import keras
 
 def getData():
 	model = np.load('../datasets/NTU/xsub/Final-Data/train_data.npy')
-	model = np.swapaxes(np.swapaxes(model[:,:,:,:],1,3),1,2)
+	model = np.swapaxes(np.swapaxes(model[:,:,:,:],1,3),1,2)[:300, :, :, :]
 	return model
 
 def getLabels():
 	model = np.load('../datasets/NTU/xsub/Final-Data/train_labels.npy')
 	labels = model
-	labels = labels.reshape(-1,1)
+	labels = labels.reshape(-1,1)[:300, :]
 	return labels
 
 def getValData():
