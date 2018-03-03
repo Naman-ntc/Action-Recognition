@@ -7,15 +7,19 @@ from helperFunctions import *
 
 
 class PlotLosses(keras.callbacks.Callback):	
+	
+	def __init__(self):
+		super(PlotLosses, self).__init__()
+		self.losses = []
+		
 	def on_train_begin(self, logs={}):
 		self.i = 0
 		self.x = []
-		self.losses = []
-		self.val_losses = []
 		
 		self.fig = plt.figure()
 		
 		self.logs = []
+
 
 	def on_batch_end(self, epoch, logs={}):
 		
@@ -96,3 +100,9 @@ def ValAcc():
 	labels = to_categorical(labels,num_classes=49)
 	print(checkAcc(model,trainingData,labels))	
 
+def Schedule(l):
+	for tup in l:
+		change_lr(tup[0])
+		train(epochs=tup[1])
+
+Schedule([(1e-3,10),(1e-4,10),(1e-5,20)])	
