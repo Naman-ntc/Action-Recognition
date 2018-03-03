@@ -4,6 +4,7 @@ from keras.layers import GlobalAveragePooling2D, Flatten
 from keras.optimizers import SGD, RMSprop, Adam #change to adam
 from keras.utils import to_categorical
 from helperFunctions import *
+from keras import regularizer
 
 
 class PlotLosses(keras.callbacks.Callback):	
@@ -39,6 +40,7 @@ class PlotLosses(keras.callbacks.Callback):
 
 learningRate = 1e-3
 batchSize = 64
+regParam = 0.01
 
 trainingData = getData()
 labels = getLabels()
@@ -46,30 +48,30 @@ labels = to_categorical(labels,num_classes=49)
 
 model = Sequential()
 model.add(BatchNormalization(input_shape=(300,25,3)))
-model.add(Conv2D(32, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(Conv2D(32, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(regParam)))
 model.add(BatchNormalization())
-model.add(Conv2D(32, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal'))
-model.add(BatchNormalization())
-model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(Conv2D(32, (3,3), padding='same', activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(regParam)))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size = (2,2)))
-model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(Conv2D(64, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(regParam)))
 model.add(BatchNormalization())
-model.add(Conv2D(64, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(regParam)))
+model.add(BatchNormalization())
+model.add(Conv2D(64, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(regParam)))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(regParam)))
 model.add(BatchNormalization())
-model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(Conv2D(64, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(regParam)))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
 # model.add(GlobalAveragePooling2D())
 model.add(Flatten())
-model.add(Dense(512, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(128, activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(2*regParam)))
 model.add(BatchNormalization())
-model.add(Dense(128, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(64, activation='relu', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(2*regParam)))
 model.add(BatchNormalization())
-model.add(Dense(49, activation='softmax', kernel_initializer='he_normal'))
+model.add(Dense(49, activation='softmax', kernel_initializer='he_normal', kernel_regularizer = regularizer.l2(2*regParam)))
 
 print(model.summary())
 

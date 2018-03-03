@@ -32,3 +32,35 @@ model.add(Dense(49, activation='softmax', kernel_initializer='he_normal'))
 overfits of 300 data samples but no change in loss in 10-15 epochs for full data. 
 3000 data samples->starts falling after 8-9 oterations
 8000 data samples->starts falling after 25 iterations (finally overfits)
+
+
+Model 2:
+
+model = Sequential()
+model.add(BatchNormalization(input_shape=(300,25,3)))
+model.add(Conv2D(32, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(Conv2D(32, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size = (2,2)))
+model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(Conv2D(64, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2,2)))
+# model.add(GlobalAveragePooling2D())
+model.add(Flatten())
+model.add(Dense(512, activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(Dense(128, activation='relu', kernel_initializer='he_normal'))
+model.add(BatchNormalization())
+model.add(Dense(49, activation='softmax', kernel_initializer='he_normal'))
+
+for 3000:overfits but val acc only 2%
