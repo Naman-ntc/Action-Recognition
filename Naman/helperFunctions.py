@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 import keras
 
 def getData():
-	model = np.load('../datasets/NTU/xsub/Final-Data/train_data.npy')
-	model = np.swapaxes(np.swapaxes(model[:,:,:,:],1,3),1,2)#[:8000,:,:,:]
+	model = np.load('../datasets/NTU/xsub/Final-Data2/train_data.npy')[:3000,:,:,:]
+	#model = np.swapaxes(np.swapaxes(model[:,:,:,:],1,3),1,2)#[:8000,:,:,:]
 	return model
 
 def getLabels():
-	model = np.load('../datasets/NTU/xsub/Final-Data/train_labels.npy')
+	model = np.load('../datasets/NTU/xsub/Final-Data2/train_labels.npy')
 	labels = model
-	labels = labels.reshape(-1,1)#[:8000,:]
+	labels = labels.reshape(-1,1)[:3000,:]
 	return labels
 
 def getValData():

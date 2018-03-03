@@ -48,25 +48,26 @@ model = Sequential()
 model.add(BatchNormalization(input_shape=(300,25,3)))
 model.add(Conv2D(32, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
-model.add(Conv2D(32, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(Conv2D(32, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
 model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size = (2,2)))
 model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
-model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
+model.add(Conv2D(64, (3,3), strides=(2,1), padding='same', activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
 model.add(Conv2D(64, (3,3), padding='same', activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size=(2,2)))
 # model.add(GlobalAveragePooling2D())
 model.add(Flatten())
-model.add(Dense(128, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(512, activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
-model.add(Dense(64, activation='relu', kernel_initializer='he_normal'))
+model.add(Dense(128, activation='relu', kernel_initializer='he_normal'))
 model.add(BatchNormalization())
 model.add(Dense(49, activation='softmax', kernel_initializer='he_normal'))
 
@@ -74,7 +75,7 @@ print(model.summary())
 
 #print(checkAcc(model,trainingData,labels))
 
-rmsprop = RMSprop(lr=learningRate, rho=0.9, epsilon=None, decay=0.0)
+#rmsprop = RMSprop(lr=learningRate, rho=0.9, epsilon=None, decay=0.0)
 adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 model.compile(loss='categorical_crossentropy', optimizer=adam)
 
@@ -88,7 +89,7 @@ def train(batch_size=64,epochs=6):
 	TrainAcc()
 
 def change_lr(new_lr):
-	rmsprop.lr = new_lr
+	adam.lr = new_lr
 
 def TrainAcc():
 	print(checkAcc(model,trainingData,labels))
@@ -104,4 +105,3 @@ def Schedule(l):
 		change_lr(tup[0])
 		train(epochs=tup[1])
 
-Schedule([(1e-3,100),(1e-4,50),(1e-5,100)])	
