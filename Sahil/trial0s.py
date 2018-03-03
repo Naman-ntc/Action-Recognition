@@ -1,5 +1,4 @@
-import numpy as np 
-from helperFunctions import *
+import numpy as np
 
 def f(a):
 	##array is 3d
@@ -25,9 +24,18 @@ def f(a):
 	a[currentIndex:] = a[:howMuch]
 	return a
 
-trainData = getData()
+data = np.zeros((5, 300, 25, 3))
+data[0,:25,:,:] = np.arange(25*25*3).reshape(25, 25, 3)
+data[1,:32,:,:] = np.arange(32*25*3).reshape(32, 25, 3)
+data[2,:,:,:] = np.arange(300*25*3).reshape(300, 25, 3)
+data[3,:12,:,:] = np.arange(12*25*3).reshape(12, 25, 3)
+data[4,:20,:,:] = np.arange(20*25*3).reshape(20, 25, 3)
 
-for i in range(trainData.shape[0]):
-	trainData[i,:,:,:] = f(trainData[i,:,:,:])
 
-np.save(open("Final-Data2/train_data.npy", 'wb'), trainData)
+#ans = np.apply_over_axes(f, data, [1,2,3])
+
+for i in range(data.shape[0]):
+	data[i,:,:,:] = f(data[i,:,:,:])
+
+print(data[0,0,:,:])
+print(data.shape)
