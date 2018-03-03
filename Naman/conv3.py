@@ -11,11 +11,10 @@ class PlotLosses(keras.callbacks.Callback):
 	def __init__(self):
 		super(PlotLosses, self).__init__()
 		self.losses = []
-		
+		self.x = []
+
 	def on_train_begin(self, logs={}):
 		self.i = 0
-		self.x = []
-		
 		self.fig = plt.figure()
 		
 		self.logs = []
@@ -105,4 +104,4 @@ def Schedule(l):
 		change_lr(tup[0])
 		train(epochs=tup[1])
 
-Schedule([(1e-3,10),(1e-4,10),(1e-5,20)])	
+Schedule([(1e-3,100),(1e-4,50),(1e-5,100)])	
