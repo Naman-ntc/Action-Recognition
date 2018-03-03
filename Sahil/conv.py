@@ -1,6 +1,6 @@
 from keras import Sequential
 from keras.layers import Dense, Conv2D, Activation, MaxPooling2D, BatchNormalization
-from keras.layers import GlobalAveragePooling2D
+from keras.layers import GlobalAveragePooling2D, Flatten
 from keras.optimizers import SGD, RMSprop, Adam #change to adam
 from keras.utils import to_categorical
 from helperFunctions import *
@@ -25,11 +25,13 @@ model.add(Conv2D(64, (3,3), padding='same', activation='relu'))
 model.add(BatchNormalization())
 model.add(Conv2D(64, (3,3), padding='same', activation='relu'))
 model.add(BatchNormalization())
-model.add(Conv2D(128, (3,3), padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Conv2D(64, (3,3), padding='same', activation='relu'))
 model.add(BatchNormalization())
-model.add(Conv2D(128, (3,3), padding='same', activation='relu'))
+model.add(Conv2D(64, (3,3), padding='same', activation='relu'))
 model.add(BatchNormalization())
-model.add(GlobalAveragePooling2D())
+# model.add(GlobalAveragePooling2D())
+model.add(Flatten())
 model.add(Dense(128, activation='relu'))
 model.add(BatchNormalization())
 model.add(Dense(64, activation='relu'))
