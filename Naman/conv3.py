@@ -4,8 +4,8 @@ from keras.layers import GlobalAveragePooling2D, Flatten
 from keras.optimizers import SGD, RMSprop, Adam #change to adam
 from keras.utils import to_categorical
 from helperFunctions import *
-from keras import regularizer
-
+from keras import regularizers as regularizer
+from keras import metrics
 
 class PlotLosses(keras.callbacks.Callback):	
 	
@@ -36,11 +36,12 @@ class PlotLosses(keras.callbacks.Callback):
 		plt.show()
 		plt.savefig('current_loss.png')
 		plt.close()
-		TrainAcc()	
+		if (self.x[-1]%8 == 0):
+			TrainAcc()	
 
 learningRate = 1e-3
 batchSize = 64
-regParam = 0.01
+regParam = 1e-5
 
 trainingData = getData()
 labels = getLabels()
@@ -79,7 +80,7 @@ print(model.summary())
 
 #rmsprop = RMSprop(lr=learningRate, rho=0.9, epsilon=None, decay=0.0)
 adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
-model.compile(loss='categorical_crossentropy', optimizer=adam)
+model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=[metrics.categorical_crossentropy])
 
 plot_losses = PlotLosses()
 

@@ -24,10 +24,10 @@ def f(a):
 	a[currentIndex:] = a[:howMuch]
 	return a
 
-trainData = getData()
+trainData = getValData()
 
 for i in range(trainData.shape[0]):
 	print(i)
 	trainData[i,:,:,:] = f(trainData[i,:,:,:])
-
-np.save(open("Final-Data2/train_data.npy", 'wb'), trainData)
+	
+np.save(open("Final-Data2/val_data.npy", 'wb'), trainData)
