@@ -86,3 +86,14 @@ model0 = LSTMClassifier(label_size=5)
 l = train(model0, 10, 100, 2, 20)
 
 plt.plot(l)			
+
+def checkAcc(data,labels):
+	l = labels.size()[0]
+	out_labels = torch.zeros(l,1)
+	for i in range(l):
+		out_labels[i,:] = model.forward(trainingData[i,:,:,:].view(300,1,75)).max()[1]
+	return(torch.mean(labels.max(dim=1)[1]==out_labels))	
+
+def TrainAcc():
+	print(checkAcc(trainingData,labels))
+	
