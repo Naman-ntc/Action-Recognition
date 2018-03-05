@@ -4,6 +4,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from helperFunctions import *
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
@@ -83,9 +86,11 @@ def train(model, num_epoch, num_iter, rec_interval, disp_interval):
 
 
 model0 = LSTMClassifier(label_size=5)
-l = train(model0, 10, 100, 2, 20)
+#l = train(model0, 10, 100, 2, 20)
 
 plt.plot(l)			
+plt.show()
+plt.savefig('loss.png')
 
 def checkAcc(data,labels):
 	l = labels.size()[0]
@@ -96,4 +101,3 @@ def checkAcc(data,labels):
 
 def TrainAcc():
 	print(checkAcc(trainingData,labels))
-	
