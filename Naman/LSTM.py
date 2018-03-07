@@ -96,6 +96,9 @@ def train(model, num_epoch, num_iter, lr=1e-3,rec_interval=2, disp_interval=10):
 		n_samples = 0
 		randpermed = torch.randperm(trainingData.size()[0])[:num_iter]
 		for i in range(num_iter):
+			model.hidden = (model.hidden[0].detach(), model.hidden[1].detach())
+			model.zero_grad()
+			
 			j = randpermed[i]
 			X,Y = trainingData[j,:,:,:].view(300,1,75),labels[j,:]
 			n_samples += len(X)
@@ -103,14 +106,12 @@ def train(model, num_epoch, num_iter, lr=1e-3,rec_interval=2, disp_interval=10):
 			#print(X)
 			Y = autograd.Variable(Y.view(1))
 			y_hat = model(X)
-			model.zero_grad()
 			loss = F.cross_entropy(y_hat, Y)
 			avg_loss += loss.data[0]
 			if i % disp_interval == 0:
 				print('epoch: %d iterations: %d loss :%g' % (eph, i, loss.data[0]))
 			if rec_step%rec_interval==0:
 				loss_values.append(loss.data[0])
-			model.hidden = (model.hidden[0].detach(), model.hidden[1].detach())
 			loss.backward()
 			optimizer.step()
 			rec_step += 1
@@ -131,12 +132,16 @@ def PlotLoss(l,name):
 
 def Scheduler():
 	loss0 = train(model0,3,3300,6e-3)
-	loss1 = train(model0,40,3300,1e-3)
+	loss1 = train(model0,20,3300,1e-3)
 	PlotLoss(loss1,'loss1.png')
 	TrainAcc()
-	loss2 = train(model0,40,3300,1e-4)
-	PlotLoss(loss1+loss2,'loss2.png')
+	loss2 = train(model0,20,3300,1e-3)
 	TrainAcc()
-	loss3 = train(model0,50,3300,1e-5)
-	PlotLoss(loss1+loss2+loss3,'loss3.png')
+	loss3 = train(model0,20,3300,1e-4)
+	PlotLoss(loss1+loss2+loss3,'loss2.png')
+	TrainAcc()
+	loss4 = train(model0,20,3300,1e-4)
+	TrainAcc()
+	loss5 = train(model0,50,3300,1e-5)
+	PlotLoss(loss1+loss2+loss3+loss4+loss5,'loss3.png')
 	TrainAcc()
