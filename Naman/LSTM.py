@@ -66,7 +66,7 @@ for i in range(labels.shape[0]):
 labels = torch.from_numpy(neededLabels).view(number,-1).type(torch.cuda.LongTensor)
 trainingData = neededData
 
-def checkAcc(data,labels):
+def checkAcc(model0,data,labels):
 	l = labels.size()[0]
 	labelsdash = autograd.Variable(labels.view(l))
 	l = 1000
@@ -82,7 +82,7 @@ model0 = LSTMClassifier(label_size=5)
 
 
 def TrainAcc():
-	print(checkAcc(trainingData,labels))
+	print(checkAcc(model0,trainingData,labels))
 
 
 #print(labels.size())
