@@ -51,7 +51,7 @@ momentum = 0.9
 # 0:TCN_simple, 1:TCN_plain, 2:TCN_resnet, 3:TCN_simple_resnet
 model_choice = 2
 out_dir_name = 'TCN_raw_resnet_L10'
-activation = "relu"
+	
 optimizer = SGD(lr=lr, momentum=momentum, decay=0.0, nesterov=True)
 #optimizer = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 dropout = 0.5
