@@ -45,18 +45,20 @@ class PlotLosses(keras.callbacks.Callback):
 
 
 trainingData = getData()
+temp_shape = trainingData.shape 
+trainingData = trainingData.reshape(temp_shape[0],300,-1)
 labels = getLabels()
 labels = to_categorical(labels,num_classes=49)
 
-n_classes = 38
+n_classes = 49
 feat_dim = 75
 max_len = 300
 
 dropout = 0.5
-reg = l1(1.e-4)
+reg = l1(6.e-5)
 activation = "relu"
 
-model = model_TCN_plain = Models.TCN_plain(
+model = Models.TCN_resnet(
 		n_classes,
 		feat_dim,
 		max_len,
@@ -66,7 +68,7 @@ model = model_TCN_plain = Models.TCN_plain(
 		activation=activation)
 
 
-adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+adam = RMSprop(lr=0.001)
 model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=[metrics.categorical_crossentropy])
 
 plot_losses = PlotLosses()
@@ -74,7 +76,7 @@ plot_losses = PlotLosses()
 # c.model.fit(c.trainingData, c.labels, batch_size = c.batchSize, epochs = 100)
 # c.checkAcc(c.model,c.trainingData,c.labels)
 
-def train(batch_size=64,epochs=6):
+def train(batchSize=64,epochs=6):
 	model.fit(trainingData, labels, batch_size = batchSize, epochs = epochs, callbacks=[plot_losses])
 	TrainAcc()
 
@@ -87,6 +89,8 @@ def TrainAcc():
 def ValAcc():
 	trainingData = getValData()
 	labels = getValLabels()
+	temp_shape = trainingData.shape 
+	trainingData = trainingData.reshape(temp_shape[0],300,-1)
 	labels = to_categorical(labels,num_classes=49)
 	print(checkAcc(model,trainingData,labels))	
 
