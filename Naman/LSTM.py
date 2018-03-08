@@ -23,21 +23,23 @@ class LSTMClassifier(nn.Module):
 		super(LSTMClassifier, self).__init__()
 		self.hidden_dim = hidden_dim
 		self.fully_connected = nn.Sequential(nn.Linear(75, 70),nn.ReLU(),nn.Linear(70, 64),nn.ReLU())
-		self.lstm = nn.LSTM(modified_input_dim, hidden_dim)
+		self.lstm = nn.LSTM(input_size=modified_input_dim, hidden_size=hidden_dim)
 		self.hidden2label = nn.Linear(hidden_dim, label_size)
 		self.hidden = self.init_hidden()
-		#self.num_frames = num_frames
-
+		
 	def init_hidden(self):
 		# the first is the hidden h
 		# the second is the cell  c
-		return (autograd.Variable(torch.zeros(300,1, self.hidden_dim)),
-				autograd.Variable(torch.zeros(300,1, self.hidden_dim)))
+		return (autograd.Variable(torch.zeros(1,1, self.hidden_dim)),
+				autograd.Variable(torch.zeros(1	,1, self.hidden_dim)))
 
 	def forward(self, joint_3d_vec):
+		#print(joint_3d_vec.size())
 		x = joint_3d_vec
 		x = self.fully_connected(x.view(x.size()[0],x.size()[2]))
 		x = x.view(x.size()[0],1,x.size()[1])
+		#print(x.size())
+		#print(self.hidden[0].size(), self.hidden[1].size())
 		lstm_out, self.hidden = self.lstm(x, self.hidden)
 		y  = self.hidden2label(lstm_out[-1])
 		log_probs = F.log_softmax(y)
@@ -78,7 +80,7 @@ def checkAcc(data,labels):
 		out_labels[i] = temp.max(1)[1]
 	return(torch.mean((labelsdash[0:l].type(torch.cuda.LongTensor)==out_labels.type(torch.cuda.LongTensor)).type(torch.cuda.FloatTensor)))	
 
-model0 = LSTMClassifier(label_size=5)
+model0 = LSTMClassifier(label_size=5).cuda()
 
 
 def TrainAcc():
@@ -101,6 +103,7 @@ def train(model, num_epoch, num_iter, lr=1e-3,rec_interval=2, disp_interval=10):
 			
 			j = randpermed[i]
 			X,Y = trainingData[j,:,:,:].view(300,1,75),labels[j,:]
+			#print(X.size())
 			n_samples += len(X)
 			X = autograd.Variable(X)
 			#print(X)
