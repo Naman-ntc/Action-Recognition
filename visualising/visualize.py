@@ -1,7 +1,7 @@
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import matplotlib.pyplot as plt
-import time
+import matplotlib.animation as animation
 
 a = np.load('toyData/valData.npy')
 
@@ -20,6 +20,27 @@ a = np.load('toyData/valData.npy')
 
 
 index = 50
+
+"""
+numframes = 100
+numpoints = 25
+
+fig = plt.figure()
+scat = plt.scatter()
+
+ani = animation.FuncAnimation(fig, update_plot, frames=xrange(numframes),
+                                  fargs=(color_data, scat))
+plt.show()
+
+
+def update_plot(i, data, scat):
+    scat.set_array(data[i])
+    return scat,
+
+Look at : 
+	https://stackoverflow.com/questions/9401658/how-to-animate-a-scatter-plot
+"""
+
 
 for i in range(300):
 	fig = plt.figure()
