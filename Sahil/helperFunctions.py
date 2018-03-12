@@ -1,33 +1,42 @@
 import matplotlib
-matplotlib.use('Agg')
 import pickle
 import numpy as np 
 import matplotlib.pyplot as plt
-import keras
 
 def getData():
-	model = np.load('../datasets/NTU/xsub/Final-Data/train_data.npy')
-	model = np.swapaxes(np.swapaxes(model[:,:,:,:],1,3),1,2)[:50, :, :, :]
+	model = pickle.load(open('../datasets/toyData/trainData.npy', 'rb'))
 	return model
 
 def getLabels():
-	model = np.load('../datasets/NTU/xsub/Final-Data/train_labels.npy')
-	labels = model
-	labels = labels.reshape(-1,1)[:50, :]
+	model = np.load('../datasets/toyData/trainLabels.npy')\
 	return labels
 
+
 def getValData():
-	model = np.load('../datasets/NTU/xsub/Final-Data/val_data.npy')
-	model = np.swapaxes(np.swapaxes(model[:,:,:,:],1,3),1,2)
+	model = pickle.load(open('../datasets/NTU/toyData/valData.npy', 'rb'))
 	return model
 
 def getValLabels():
-	model = np.load('../datasets/NTU/xsub/Final-Data/val_labels.npy')
-	labels = model
-	labels = labels.reshape(-1,1)
+	model = np.load('../datasets/NTU/toyData/valLabels.npy')
 	return labels
 
-def checkAcc(model, data, labels):
-	pred = model.predict(data)
-	return np.mean(np.argmax(pred,axis=1) == np.argmax(labels,axis=1))
+# def checkAcc(model, data, labels):
+# 	pred = model.predict(data)
+# 	return np.mean(np.argmax(pred,axis=1) == np.argmax(labels,axis=1))
+
+
+
+def checkAcc(model0,data,labels, length = -1):
+	if length==-1:
+		l = labels.size()[0]
+	else:
+		l = length
+	labelsdash = labels.view(l)
+	out_labels = torch.zeros(l)
+	for i in range(l):
+		temp = model0(data[i,:,:,:].view(300,1,75))
+		# print(temp)
+		# print(temp.size(), type(temp))
+		out_labels[i] = temp.max(1)[1]
+	return(torch.mean((labelsdash[0:l].type(torch.cuda.LongTensor)==out_labels.type(torch.cuda.LongTensor)).type(torch.cuda.FloatTensor)))	
 

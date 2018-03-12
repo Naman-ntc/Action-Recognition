@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-a = np.load('toyData/valData.npy')
+a = np.load('../datasets/toyData/valData.npy')
 
 # for i in range(300):
 # 	plt.figure()
