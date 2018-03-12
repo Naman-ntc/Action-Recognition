@@ -2,23 +2,25 @@ import matplotlib
 import pickle
 import numpy as np 
 import matplotlib.pyplot as plt
+import torch
+from torch import autograd
 
 def getData():
-	model = pickle.load(open('../datasets/toyData/trainData.npy', 'rb'))
+	model = pickle.load(open('../datasets/toyData/lstmProcessedTrainData.npy', 'rb'))
 	return model
 
 def getLabels():
-	model = np.load('../datasets/toyData/trainLabels.npy')\
-	return labels
+	labels = np.load('../datasets/toyData/trainLabels.npy')
+	return torch.from_numpy(labels).type(torch.LongTensor)
 
 
 def getValData():
-	model = pickle.load(open('../datasets/NTU/toyData/valData.npy', 'rb'))
+	model = pickle.load(open('../datasets/toyData/lstmProcessedValData.npy', 'rb'))
 	return model
 
 def getValLabels():
-	model = np.load('../datasets/NTU/toyData/valLabels.npy')
-	return labels
+	labels = np.load('../datasets/toyData/valLabels.npy')
+	return torch.from_numpy(labels).type(torch.LongTensor)
 
 # def checkAcc(model, data, labels):
 # 	pred = model.predict(data)
@@ -26,17 +28,24 @@ def getValLabels():
 
 
 
-def checkAcc(model0,data,labels, length = -1):
-	if length==-1:
+def checkAcc(model0,data,labels, length = 1000):
+	if length == -1:
 		l = labels.size()[0]
 	else:
 		l = length
-	labelsdash = labels.view(l)
-	out_labels = torch.zeros(l)
+		labels = labels[:l]
+	labelsdash = autograd.Variable(labels.view(l))
+	out_labels = autograd.Variable(torch.zeros(l))
 	for i in range(l):
-		temp = model0(data[i,:,:,:].view(300,1,75))
+		temp = model0(autograd.Variable(data[i].view(data[i].size()[0],1,75)))
 		# print(temp)
 		# print(temp.size(), type(temp))
 		out_labels[i] = temp.max(1)[1]
-	return(torch.mean((labelsdash[0:l].type(torch.cuda.LongTensor)==out_labels.type(torch.cuda.LongTensor)).type(torch.cuda.FloatTensor)))	
+	return(torch.mean((labelsdash[0:l].type(torch.LongTensor)==out_labels.type(torch.LongTensor)).type(torch.FloatTensor)))	
 
+
+
+def PlotLoss(l,name = 'currentLoss.png'):
+	plt.plot(l)			
+	plt.show()
+	plt.savefig(name)
