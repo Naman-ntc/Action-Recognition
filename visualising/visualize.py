@@ -3,23 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-a = np.load('toyData/valData.npy')
+# a = np.load('toyData/valData.npy')
 
-# for i in range(300):
-# 	plt.figure()
-# 	plt.plot(a[5,0,i,:],a[5,1,i,:],'ro', alpha = 0.5)
-# 	for j in range(25):
-# 		plt.text(a[5,0,i,j],a[5,1,i,j], str(j))
-# 	plt.draw()
-# 	plt.show()
-# 	#time.sleep(0.002)
-# 	#plt.clf()
-	
-# 	print("Frame%d"%(i))
+a = np.random.randn(10,3,25) * 50
 
 
 
-index = 50
+# index = 50
 
 """
 numframes = 100
@@ -42,19 +32,20 @@ Look at :
 """
 
 
-for i in range(300):
+for i in range(1):   ####### <<<============== 300
 	fig = plt.figure()
 	ax = fig.add_subplot(111, projection='3d')
-	xs = a[index, 0, i, :]
-	ys = a[index, 1, i, :]
-	zs = a[index, 2, i, :]
+	# xs = a[index, 0, i, :]
+	# ys = a[index, 1, i, :]
+	# zs = a[index, 2, i, :]
+	xs = a[0,:]
+	ys = a[1,:]
+	zs = a[2,:]
 	#for j in range(25):
 		#plt.text(a[5,0,i,j],a[5,1,i,j], a[5,2,i,j], str(j)) 	
 	ax.scatter(xs, ys, zs, c = 'r', marker = 'o',alpha=0.5)
-	for i in range(25):
-		ax.annotate(i,(xs[i],ys[i],zs[i]))
-	## If doesnt work check https://stackoverflow.com/questions/14432557/matplotlib-scatter-plot-with-different-text-at-each-data-point
-	## hopefully it works!!	
+	for j in range(25):
+		ax.text(xs[j],ys[j],zs[j], '%s' % (j))
 	plt.show()
 
 	print("Frame%d"%(i))
