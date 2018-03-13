@@ -5,10 +5,12 @@ from torch import autograd
 from torch import optim
 import torch.nn.functional as F
 
-def TrainAcc():
-	print(checkAcc(model,data,labels, length = 1000)[0])
+def TrainAcc(l = 1000):
+	print("The training accuracy is:", )
+	print(checkAcc(model,data,labels, length = l)[0])
 
 def ValAcc():
+	print("The validation accuracy is:",)
 	print(checkAcc(model, valData, valLabels)[0])
 
 class LSTMClassifier(nn.Module):
@@ -40,7 +42,7 @@ class LSTMClassifier(nn.Module):
 		log_probs = F.log_softmax(y)
 		return log_probs
 
-def train(model, num_epoch, batchSize = 5, lr=1e-3,rec_interval=5, disp_interval=3):
+def train(model, num_epoch, batchSize = 5, lr=1e-3,rec_interval=5, disp_interval=1):
 	global data, labels
 	optimizer = optim.Adam(model.parameters(), lr)
 	loss_values = []
@@ -103,8 +105,32 @@ print("Loaded validation labels")
 #print(labels.size())
 
 model = LSTMClassifier(label_size = 5)
-TrainAcc()
-ValAcc()
-loss = train(model, 1, batchSize=16, lr = 1e-4)
 #PlotLoss(loss)
 
+
+
+def Scheduler():
+	#PlotLoss(,'loss1.png')
+	TrainAcc()
+	ValAcc()
+	loss0 = train(model,5,batchSize = 16, lr = 1e-4)
+	TrainAcc()
+	ValAcc()
+	loss1 = train(model,10,batchSize = 16, lr = 3e-5)
+	#PlotLoss(loss1,'loss1.png')
+	TrainAcc()
+	ValAcc()
+	loss2 = train(model,10,batchSize = 16,lr = 1e-5)
+	TrainAcc()
+	ValAcc()
+	loss3 = train(model,10,batchSize = 16,lr=5e-6)
+	#PlotLoss(loss1+loss2+loss3,'loss2.png')
+	TrainAcc()
+	ValAcc()
+	loss4 = train(model,20,batchSize = 8,lr = 5e-6)
+	print(checkAcc(model,data,labels, length = -1)[0])
+	ValAcc()
+	PlotLoss(loss1+loss2+loss3+loss4+loss5)
+	#loss5 = train(model0,50,3300,1e-5)
+	#PlotLoss(loss1+loss2+loss3+loss4+loss5,'loss3.png')
+	#TrainAcc()
