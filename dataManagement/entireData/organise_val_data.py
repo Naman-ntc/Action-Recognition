@@ -43,24 +43,24 @@ train_labes = train_labes[train_labes<49]
 np.save('Final-Data/val_data.npy',train_data)
 np.save('Final-Data/val_labels.npy',train_labes)
 
-# indices = [0,13,22,23,37]
-# mask = np.zeros(train_labes.shape[0])
-# for i in range(train_labes.shape[0]):
-#   if train_labes[i] in indices:
-#     mask[i] = 1
+indices = [0,13,22,23,37]
+mask = np.zeros(train_labes.shape[0])
+for i in range(train_labes.shape[0]):
+  if train_labes[i] in indices:
+    mask[i] = 1
 
-# train_data = train_data[mask == 1]
-# train_labes = train_labes[mask == 1]
+train_data = train_data[mask == 1]
+train_labes = train_labes[mask == 1]
 
-# for i in range(train_labes.shape[0]):
-#   if train_labes[i] == 13:
-#     train_labes[i] = 1
-#   if train_labes[i] == 22:
-#     train_labes[i] = 2
-#   if train_labes[i] == 23:
-#     train_labes[i] = 3
-#   if train_labes[i] == 37:
-#     train_labes[i] = 4
+for i in range(train_labes.shape[0]):
+  if train_labes[i] == 13:
+    train_labes[i] = 1
+  if train_labes[i] == 22:
+    train_labes[i] = 2
+  if train_labes[i] == 23:
+    train_labes[i] = 3
+  if train_labes[i] == 37:
+    train_labes[i] = 4
 
-# np.save('toyData/trainData.npy', train_data)
-# np.save('toyData/trainLabels.npy', train_labes)
+np.save('toyData/trainData.npy', train_data)
+np.save('toyData/trainLabels.npy', train_labes)
