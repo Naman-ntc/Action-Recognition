@@ -38,6 +38,8 @@ finalData = []
 
 for i in range(trainData.shape[0]):
 	finalData.append(torch.from_numpy(f(trainData[i])))
+	if i%50 ==0 :
+		print("Truncating", i)
 
 print("Processed!!!")
 
