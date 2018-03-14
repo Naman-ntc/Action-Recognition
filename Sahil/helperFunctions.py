@@ -6,20 +6,20 @@ import torch
 from torch import autograd
 
 def getData():
-	model = pickle.load(open('../datasets/toyData/lstmProcessedTrainData.npy', 'rb'))
+	model = pickle.load(open('../datasets/processedToyData/lstmProcessedTrainData.npy', 'rb'))
 	return model
 
 def getLabels():
-	labels = np.load('../datasets/toyData/trainLabels.npy')
+	labels = np.load('../datasets/processedToyData/trainLabels.npy')
 	return torch.from_numpy(labels).type(torch.LongTensor)
 
 
 def getValData():
-	model = pickle.load(open('../datasets/toyData/lstmProcessedValData.npy', 'rb'))
+	model = pickle.load(open('../datasets/processedToyData/lstmProcessedValData.npy', 'rb'))
 	return model
 
 def getValLabels():
-	labels = np.load('../datasets/toyData/valLabels.npy')
+	labels = np.load('../datasets/processedToyData/valLabels.npy')
 	return torch.from_numpy(labels).type(torch.LongTensor)
 
 # def checkAcc(model, data, labels):

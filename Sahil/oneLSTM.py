@@ -36,7 +36,8 @@ class LSTMClassifier(nn.Module):
 		#x = input.view(input.size()[0],1,input.size()[1])
 		#print(x.size())
 		#print(self.hidden[0].size(), self.hidden[1].size())
-		x = self.embedding(input)
+		print(type(input), input.view(input.size()[0], 75).size())
+		x = self.embedding(input.view(input.size()[0], 75))
 		lstm_out, self.hidden = self.lstm(x, self.hidden)
 		y  = self.fullyConnected(lstm_out[-1])
 		log_probs = F.log_softmax(y)
@@ -84,6 +85,7 @@ def train(model, num_epoch, batchSize = 5, lr=1e-3,rec_interval=5, disp_interval
 		#evaluating model accuracy
 		#TrainAcc()
 		print('epoch: {} <====train track===> avg_loss: {} \n'.format(eph, avg_loss))
+	PlotLoss(loss_values, name = 'oneLSTMloss.png')
 	return loss_values
 
 
@@ -134,3 +136,7 @@ def Scheduler():
 	#loss5 = train(model0,50,3300,1e-5)
 	#PlotLoss(loss1+loss2+loss3+loss4+loss5,'loss3.png')
 	#TrainAcc()
+
+
+TrainAcc()
+

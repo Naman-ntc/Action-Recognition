@@ -21,7 +21,7 @@ def f(a):
 	return a[:firstZeroIndex]
 
 
-trainData = np.load('../../datasets/NTU/Final-Data/val_data.npy')
+trainData = np.load('../../datasets/NTU/toyData/valData.npy')
 trainData = np.swapaxes(trainData, 1,2)
 trainData = np.swapaxes(trainData, 2,3)
 
@@ -43,4 +43,4 @@ for i in range(trainData.shape[0]):
 
 print("Processed!!!")
 
-pickle.dump(finalData, open("../../datasets/processedData/lstmProcessedValData.npy", 'wb'))
+pickle.dump(finalData, open("../../datasets/processedToyData/lstmProcessedValData.npy", 'wb'))

@@ -11,9 +11,9 @@ def TrainAcc(l = 1000):
 	print("The training accuracy is:", )
 	print(checkAcc(model,data,labels, length = l)[0])
 
-def ValAcc():
+def ValAccl(l = 1000):
 	print("The validation accuracy is:",)
-	print(checkAcc(model, valData, valLabels)[0])
+	print(checkAcc(model, valData, valLabels, length = l)[0])
 
 class LSTMClassifier(nn.Module):
 
@@ -96,7 +96,7 @@ def train(model, num_epoch, epoch_size = -1, batchSize = 5, lr=1e-3,rec_interval
 		#evaluating model accuracy
 		#TrainAcc()
 		print('epoch: {} <====train track===> avg_loss: {} \n'.format(eph, avg_loss))
-	PlotLoss(loss_values, name = 'oneLSTMloss.png')
+	PlotLoss(loss_values, name = 'twoLSTMloss.png')
 	return loss_values
 
 
@@ -117,7 +117,7 @@ print("Loaded validation labels")
 
 #print(labels.size())
 
-model = LSTMClassifier(label_size = 5)
+model = LSTMClassifier(label_size = 5, num_layers = 3)
 #PlotLoss(loss)
 
 
@@ -150,6 +150,5 @@ def Scheduler():
 
 
 #Scheduler()
-
-train(model, 1, epoch_size = 512, batchSize =16, lr = 3e-4)
+train(model, 1, batchSize = 16, epoch_size = 512, lr = 3e-4)
 
