@@ -30,8 +30,8 @@ class LSTMClassifier(nn.Module):
 	def init_hidden(self):
 		# the first is the hidden h
 		# the second is the cell  c
-		return (autograd.Variable(torch.zeros(1,1, self.hidden_dim)),
-				autograd.Variable(torch.zeros(1	,1, self.hidden_dim)))
+		return (autograd.Variable(torch.zeros(1, 1, self.hidden_dim)),
+				autograd.Variable(torch.zeros(1, 1, self.hidden_dim)))
 
 	def forward(self, joint_3d_vec):
 		#print(joint_3d_vec.size())

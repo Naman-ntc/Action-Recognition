@@ -1,5 +1,3 @@
-datasets
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -7,6 +5,8 @@ __pycache__/
 
 # C extensions
 *.so
+
+datasets
 
 # Distribution / packaging
 .Python
@@ -101,3 +101,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+toyData
+valData.npy
+valLabels.npy
+trainData.npy
+trainLabels.npy

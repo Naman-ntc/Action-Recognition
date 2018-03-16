@@ -50,17 +50,17 @@ labels = getLabels()
 #indices = torch.from_numpy((labels.reshape(labels.shape[0])<5).dtype()).type(torch.LongTensor)
 #indices = (torch.from_numpy(labels)<5).numpy()
 
-number = int((labels<5).sum())
+number = int((labels==17).sum()) + int((labels==23).sum())
 #indices = (labels<5)
 # labels = labels[indices,:]
 # trainingData = trainingData[indices,:,:,:]
 
-neededData = torch.randn(number, 300, 25, 3)
+neededData = torch.randn(number, 300, 8, 3)
 neededLabels = np.zeros((number,1))
 currentIndex = 0
 for i in range(labels.shape[0]):
-	if labels[i, 0] < 5:
-		neededData[currentIndex,:,:,:] = trainingData[i,:,:,:]
+	if (labels[i, 0] == 17) or (labels[i, 0] == 23):
+		neededData[currentIndex,:,:,:] = trainingData[i,:,13:21,:]
 		neededLabels[currentIndex,:] = labels[i,:]
 		currentIndex+=1
 
@@ -80,7 +80,7 @@ def checkAcc(model0,data,labels):
 		out_labels[i] = temp.max(1)[1]
 	return(torch.mean((labelsdash[0:l].type(torch.cuda.LongTensor)==out_labels.type(torch.cuda.LongTensor)).type(torch.cuda.FloatTensor)))	
 
-model0 = LSTMClassifier(label_size=5).cuda()
+model0 = LSTMClassifier(label_size=2).cuda()
 
 
 def TrainAcc():
