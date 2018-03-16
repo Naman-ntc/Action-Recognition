@@ -7,11 +7,11 @@ import torch.nn.functional as F
 
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
-def TrainAcc(l = 1000):
+def TrainAcc(l = 200):
 	print("The training accuracy is:", )
 	print(checkAcc(model,data,labels, length = l)[0])
 
-def ValAccl(l = 1000):
+def ValAcc(l = 1000):
 	print("The validation accuracy is:",)
 	print(checkAcc(model, valData, valLabels, length = l)[0])
 
@@ -130,31 +130,31 @@ def Scheduler():
 	loss4 = []
 	loss5 = []
 	#PlotLoss(,'loss1.png')
-	contin = bool(raw_input("Do you want to continue training: "))
+	contin = bool(input("Do you want to continue training: "))
 	TrainAcc()
 	ValAcc()
 	if contin:
 		loss0 = train(model,5,batchSize = 16, lr = 1e-4)
 	TrainAcc()
 	ValAcc()
-	contin = bool(raw_input("Do you want to continue training: "))
+	contin = bool(input("Do you want to continue training: "))
 	if contin:
 		loss1 = train(model,10,batchSize = 16, lr = 3e-5)
 	#PlotLoss(loss1,'loss1.png')
 	TrainAcc()
 	ValAcc()
-	contin = bool(raw_input("Do you want to continue training: "))
+	contin = bool(input("Do you want to continue training: "))
 	if contin:
 		loss2 = train(model,10,batchSize = 16,lr = 1e-5)
 	TrainAcc()
 	ValAcc()
-	contin = bool(raw_input("Do you want to continue training: "))
+	contin = bool(input("Do you want to continue training: "))
 	if contin:
 		loss3 = train(model,10,batchSize = 16,lr=5e-6)
 	#PlotLoss(loss1+loss2+loss3,'loss2.png')
 	TrainAcc()
 	ValAcc()
-	contin = bool(raw_input("Do you want to continue training: "))
+	contin = bool(input("Do you want to continue training: "))
 	if contin:
 		loss4 = train(model,20,batchSize = 8,lr = 5e-6)
 	print(checkAcc(model,data,labels, length = -1)[0])

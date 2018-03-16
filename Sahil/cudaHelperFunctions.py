@@ -11,11 +11,11 @@ def getData():
 	model = pickle.load(open('../datasets/processedToyData/lstmProcessedTrainData.npy', 'rb'))
 	for i in range(len(model)):
 		model[i] = model[i].type(torch.cuda.FloatTensor)
-	return model
+	return model[:300]
 
 def getLabels():
 	labels = np.load('../datasets/processedToyData/trainLabels.npy')
-	return torch.from_numpy(labels).type(torch.cuda.LongTensor)
+	return torch.from_numpy(labels).type(torch.cuda.LongTensor)[:300]
 
 
 def getValData():
