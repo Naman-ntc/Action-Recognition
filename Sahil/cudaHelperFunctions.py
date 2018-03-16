@@ -11,11 +11,11 @@ def getData():
 	model = pickle.load(open('../datasets/processedToyData/lstmProcessedTrainData.npy', 'rb'))
 	for i in range(len(model)):
 		model[i] = model[i].type(torch.cuda.FloatTensor)
-	return model[:300]
+	return model
 
 def getLabels():
 	labels = np.load('../datasets/processedToyData/trainLabels.npy')
-	return torch.from_numpy(labels).type(torch.cuda.LongTensor)[:300]
+	return torch.from_numpy(labels).type(torch.cuda.LongTensor)
 
 
 def getValData():
@@ -54,6 +54,9 @@ def checkAcc(model0,data,labels, length = 1000):
 
 
 def PlotLoss(l,name = 'currentLoss.png'):
+	plt.clf()
+	plt.cla()
+	plt.close()
 	plt.plot(l)			
 	plt.show()
 	plt.savefig(name)

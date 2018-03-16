@@ -5,13 +5,13 @@ from torch import autograd
 from torch import optim
 import torch.nn.functional as F
 
-def TrainAcc(l = 1000):
+def TrainAcc(l = 200):
 	print("The training accuracy is:", )
 	print(checkAcc(model,data,labels, length = l)[0])
 
-def ValAcc():
+def ValAcc(l = 500):
 	print("The validation accuracy is:",)
-	print(checkAcc(model, valData, valLabels)[0])
+	print(checkAcc(model, valData, valLabels, length = l)[0])
 
 class LSTMClassifier(nn.Module):
 
@@ -36,9 +36,9 @@ class LSTMClassifier(nn.Module):
 		#x = input.view(input.size()[0],1,input.size()[1])
 		#print(x.size())
 		#print(self.hidden[0].size(), self.hidden[1].size())
-		print(type(input), input.view(input.size()[0], 75).size())
-		x = self.embedding(input.view(input.size()[0], 75))
-		lstm_out, self.hidden = self.lstm(x, self.hidden)
+		#print(type(input), input.view(input.size()[0], 75).size())
+		#x = self.embedding(input.view(input.size()[0], 75))
+		lstm_out, self.hidden = self.lstm(input, self.hidden)
 		y  = self.fullyConnected(lstm_out[-1])
 		log_probs = F.log_softmax(y)
 		return log_probs
@@ -73,7 +73,7 @@ def train(model, num_epoch, batchSize = 5, lr=1e-3,rec_interval=5, disp_interval
 				loss = F.cross_entropy(y_hat, Y)
 				avg_loss += loss.data[0]
 				totalLoss += loss.data[0]
-				loss.backward(retain_graph = True)
+				loss.backward(retain_variables=True)
 				rec_step += 1
 			optimizer.step()
 			if i % disp_interval == 0:
@@ -154,5 +154,4 @@ def Scheduler():
 	#TrainAcc()
 
 
-TrainAcc()
 

@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
-def TrainAcc(l = 200):
+def TrainAcc(l = 20):
 	print("The training accuracy is:", )
 	print(checkAcc(model,data,labels, length = l)[0])
 
