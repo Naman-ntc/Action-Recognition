@@ -1,19 +1,17 @@
 import torch
-from cudaHelperFunctions import *
+from helperFunctions import *
 import torch.nn as nn
 from torch import autograd
 from torch import optim
 import torch.nn.functional as F
 
-torch.set_default_tensor_type('torch.cuda.FloatTensor')
-
 def TrainAcc(l = 1000):
 	print("The training accuracy is:", )
 	print(checkAcc(model,data,labels, length = l)[0])
 
-def ValAccl(l = 1000):
+def ValAcc():
 	print("The validation accuracy is:",)
-	print(checkAcc(model, valData, valLabels, length = l)[0])
+	print(checkAcc(model, valData, valLabels)[0])
 
 class LSTMClassifier(nn.Module):
 
@@ -29,8 +27,8 @@ class LSTMClassifier(nn.Module):
 	def init_hidden(self):
 		# the first is the hidden h
 		# the second is the cell  c
-		return (autograd.Variable(torch.zeros(self.layers, 1, self.hiddenDim).type(torch.cuda.FloatTensor)),
-				autograd.Variable(torch.zeros(self.layers, 1, self.hiddenDim).type(torch.cuda.FloatTensor)))
+		return (autograd.Variable(torch.zeros(self.layers, 1, self.hiddenDim)),
+				autograd.Variable(torch.zeros(self.layers, 1, self.hiddenDim)))
 
 	def forward(self, input):
 		#print(joint_3d_vec.size())
@@ -38,21 +36,14 @@ class LSTMClassifier(nn.Module):
 		#x = input.view(input.size()[0],1,input.size()[1])
 		#print(x.size())
 		#print(self.hidden[0].size(), self.hidden[1].size())
-		#print(type(input))
-		#print(input.size())
-		#print(input.type())
-		x = autograd.Variable(input)
-		#x = self.embedding(input.view(input.size()[0], 75))
-		x = self.embedding(x)
-		#print(x.size())
-		#print(x.view(x.size()[0], 1, 64).size())
-		#print(type(x), type(self.hidden[0]))
-		lstm_out, self.hidden = self.lstm(x.view(x.size()[0],1, 64), self.hidden)
+		print(type(input), input.view(input.size()[0], 75).size())
+		x = self.embedding(input.view(input.size()[0], 75))
+		lstm_out, self.hidden = self.lstm(x, self.hidden)
 		y  = self.fullyConnected(lstm_out[-1])
 		log_probs = F.log_softmax(y)
 		return log_probs
 
-def train(model, num_epoch, epoch_size = -1, batchSize = 5, lr=1e-3,rec_interval=5, disp_interval=1):
+def train(model, num_epoch, batchSize = 5, lr=1e-3,rec_interval=5, disp_interval=1):
 	global data, labels
 	optimizer = optim.Adam(model.parameters(), lr)
 	loss_values = []
@@ -61,10 +52,7 @@ def train(model, num_epoch, epoch_size = -1, batchSize = 5, lr=1e-3,rec_interval
 		print('epoch {} starting ...'.format(eph))
 		avg_loss = 0
 		n_samples = 0
-		if epoch_size == -1:
-			num_iter = len(data)//batchSize
-		else:
-			num_iter = epoch_size//batchSize
+		num_iter = len(data)//batchSize
 		randpermed = torch.randperm(len(data))
 		for i in range(num_iter):
 			model.hidden = (model.hidden[0].detach(), model.hidden[1].detach())
@@ -73,18 +61,19 @@ def train(model, num_epoch, epoch_size = -1, batchSize = 5, lr=1e-3,rec_interval
 			
 			for k in range(batchSize):
 				j = randpermed[i*batchSize + k]
-				X= data[j]
-				Y = torch.cuda.LongTensor(1)
+				X= data[j].view(data[j].size()[0],1,75)
+				Y = torch.LongTensor(1)
 				Y[0]=labels[j]
 				#print(X.size())
 				n_samples += len(X)
+				X = autograd.Variable(X)
 				#print(X)
 				Y = autograd.Variable(Y)
 				y_hat = model(X)
 				loss = F.cross_entropy(y_hat, Y)
 				avg_loss += loss.data[0]
 				totalLoss += loss.data[0]
-				loss.backward(retain_variables = True)
+				loss.backward(retain_graph = True)
 				rec_step += 1
 			optimizer.step()
 			if i % disp_interval == 0:
@@ -96,7 +85,7 @@ def train(model, num_epoch, epoch_size = -1, batchSize = 5, lr=1e-3,rec_interval
 		#evaluating model accuracy
 		#TrainAcc()
 		print('epoch: {} <====train track===> avg_loss: {} \n'.format(eph, avg_loss))
-	PlotLoss(loss_values, name = 'twoLSTMloss.png')
+	PlotLoss(loss_values, name = 'oneLSTMloss.png')
 	return loss_values
 
 
@@ -117,7 +106,7 @@ print("Loaded validation labels")
 
 #print(labels.size())
 
-model = LSTMClassifier(label_size = 5, num_layers = 3)
+model = LSTMClassifier(label_size = 5)
 #PlotLoss(loss)
 
 
@@ -164,4 +153,6 @@ def Scheduler():
 	#PlotLoss(loss1+loss2+loss3+loss4+loss5,'loss3.png')
 	#TrainAcc()
 
+
+TrainAcc()
 
