@@ -7,11 +7,11 @@ from torch import autograd
 
 def getData():
 	model = pickle.load(open('../datasets/processedToyData/lstmProcessedTrainData.npy', 'rb'))
-	return model
+	return model[:300]
 
 def getLabels():
 	labels = np.load('../datasets/processedToyData/trainLabels.npy')
-	return torch.from_numpy(labels).type(torch.LongTensor)
+	return torch.from_numpy(labels).type(torch.LongTensor)[:300]
 
 
 def getValData():
