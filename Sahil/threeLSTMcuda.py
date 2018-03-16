@@ -11,7 +11,7 @@ def TrainAcc(l = 1000):
 	print("The training accuracy is:", )
 	print(checkAcc(model,data,labels, length = l)[0])
 
-def ValAccl(l = 1000):
+def ValAcc(l = 1000):
 	print("The validation accuracy is:",)
 	print(checkAcc(model, valData, valLabels, length = l)[0])
 
@@ -43,11 +43,11 @@ class LSTMClassifier(nn.Module):
 		#print(input.type())
 		x = autograd.Variable(input)
 		#x = self.embedding(input.view(input.size()[0], 75))
-		x = self.embedding(x)
+		#x = self.embedding(x)
 		#print(x.size())
 		#print(x.view(x.size()[0], 1, 64).size())
 		#print(type(x), type(self.hidden[0]))
-		lstm_out, self.hidden = self.lstm(x.view(x.size()[0],1, 64), self.hidden)
+		lstm_out, self.hidden = self.lstm(x.view(x.size()[0],1, 75), self.hidden)
 		y  = self.fullyConnected(lstm_out[-1])
 		log_probs = F.log_softmax(y)
 		return log_probs
