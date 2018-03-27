@@ -37,10 +37,6 @@ def checkAcc(model0,data,labels, length = 1000):
 	labelsdash = autograd.Variable(labels.view(l))
 	out_labels = autograd.Variable(torch.zeros(l))
 	for i in range(l):
-
-		model0.hidden = (model.hidden[0].detach(), model.hidden[1].detach())
-		model0.zero_grad()
-			
 		temp = model0(autograd.Variable(data[i].view(data[i].size()[0],1,75)))
 		# print(temp)
 		# print(temp.size(), type(temp))
