@@ -7,13 +7,13 @@ import torch.nn.functional as F
 
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
-def TrainAcc(l = 1000):
+def TrainAcc(start = 0, l = 1000):
 	print("The training accuracy is:", )
-	print(checkAcc(model,data,labels, length = l)[0])
+	print(checkAcc(model,data,labels, start = start, length = l)[0])
 
-def ValAcc(l = 1000):
+def ValAcc(start = 0, l = 1000):
 	print("The validation accuracy is:",)
-	print(checkAcc(model, valData, valLabels, length = l)[0])
+	print(checkAcc(model, valData, valLabels,start = start, length = l)[0])
 
 class LSTMClassifier(nn.Module):
 
@@ -120,12 +120,6 @@ print("Loaded validation labels")
 model = LSTMClassifier(num_layers = 2)
 #PlotLoss(loss)
 
-TrainAcc()
-ValAcc()
-loss = train(model, 1, epoch_size = 512,  batchSize = 16, lr = 1e-4)
-PlotLoss(loss)
-TrainAcc()
-ValAcc()
 
 def Scheduler():
 	loss0 = []
