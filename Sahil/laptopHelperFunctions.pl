@@ -6,20 +6,20 @@ import torch
 from torch import autograd
 
 def getData():
-	model = pickle.load(open('../datasets/processedData/lstmProcessedTrainData.npy', 'rb'))
+	model = pickle.load(open('../datasets/processedToyData/lstmProcessedTrainData.npy', 'rb'))
 	return model[:300]
 
 def getLabels():
-	labels = np.load('../datasets/processedData/trainLabels.npy')
+	labels = np.load('../datasets/processedToyData/trainLabels.npy')
 	return torch.from_numpy(labels).type(torch.LongTensor)[:300]
 
 
 def getValData():
-	model = pickle.load(open('../datasets/processedData/lstmProcessedValData.npy', 'rb'))
+	model = pickle.load(open('../datasets/processedToyData/lstmProcessedValData.npy', 'rb'))
 	return model
 
 def getValLabels():
-	labels = np.load('../datasets/processedData/valLabels.npy')
+	labels = np.load('../datasets/processedToyData/valLabels.npy')
 	return torch.from_numpy(labels).type(torch.LongTensor)
 
 # def checkAcc(model, data, labels):
@@ -37,10 +37,6 @@ def checkAcc(model0,data,labels, length = 1000):
 	labelsdash = autograd.Variable(labels.view(l))
 	out_labels = autograd.Variable(torch.zeros(l))
 	for i in range(l):
-
-		model0.hidden = (model.hidden[0].detach(), model.hidden[1].detach())
-		model0.zero_grad()
-			
 		temp = model0(autograd.Variable(data[i].view(data[i].size()[0],1,75)))
 		# print(temp)
 		# print(temp.size(), type(temp))
