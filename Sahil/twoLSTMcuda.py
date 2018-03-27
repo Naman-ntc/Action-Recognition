@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
-def TrainAcc(l = 20):
+def TrainAcc(l = 1000):
 	print("The training accuracy is:", )
 	print(checkAcc(model,data,labels, length = l)[0])
 
@@ -17,7 +17,7 @@ def ValAcc(l = 1000):
 
 class LSTMClassifier(nn.Module):
 
-	def __init__(self, hidden_dim=128, label_size=49, input_dim=75, num_layers = 1):
+	def __init__(self, hidden_dim=256, label_size=49, input_dim=75, num_layers = 1):
 		super(LSTMClassifier, self).__init__()
 		self.hiddenDim = hidden_dim
 		self.layers = num_layers
@@ -117,10 +117,15 @@ print("Loaded validation labels")
 
 #print(labels.size())
 
-model = LSTMClassifier(label_size = 5, num_layers = 3)
+model = LSTMClassifier(num_layers = 2)
 #PlotLoss(loss)
 
-
+TrainAcc()
+ValAcc()
+loss = train(model, 1, epoch_size = 512,  batchSize = 16, lr = 1e-4)
+PlotLoss(loss)
+TrainAcc()
+ValAcc()
 
 def Scheduler():
 	loss0 = []
