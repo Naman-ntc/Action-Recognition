@@ -34,14 +34,14 @@ def getValLabels():
 
 
 
-def checkAcc(model0,data,labels, start = 0, length = 1000):
+def checkAcc(model0,data,labels, start = 0, length = 500):
 	if length == -1:
 		l = labels.size()[0]
 	else:
 		l = length
 		labels = labels[start:start + l]
-	labelsdash = autograd.Variable(labels.view(l))
-	out_labels = autograd.Variable(torch.zeros(l))
+	labelsdash = labels.view(l)
+	out_labels = torch.zeros(l, 1).type(torch.cuda.FloatTensor)
 	for i in range(start, start + l):
 		model0.hidden = (model0.hidden[0].detach(), model0.hidden[1].detach())
 		model0.zero_grad()
@@ -49,9 +49,9 @@ def checkAcc(model0,data,labels, start = 0, length = 1000):
 		temp = model0(data[i])
 		# print(temp)
 		# print(temp.size(), type(temp))
-		if i%100 == 0:
+		if i%50 == 0 and l > 100:
 			print("checking", i, "of", length)
-		out_labels[i-start] = temp.max(1)[1]
+		out_labels[i-start] = (temp.data.max(1)[1]).type(torch.cuda.FloatTensor)[0]
 	return(torch.mean((labelsdash[:l].type(torch.cuda.LongTensor)==out_labels.type(torch.cuda.LongTensor)).type(torch.cuda.FloatTensor)))	
 
 
