@@ -39,7 +39,7 @@ def checkAcc(model0,data,labels, start = 0, length = 1000):
 		l = labels.size()[0]
 	else:
 		l = length
-		labels = labels[:l]
+		labels = labels[start:start + l]
 	labelsdash = autograd.Variable(labels.view(l))
 	out_labels = autograd.Variable(torch.zeros(l))
 	for i in range(start, start + l):
@@ -51,8 +51,8 @@ def checkAcc(model0,data,labels, start = 0, length = 1000):
 		# print(temp.size(), type(temp))
 		if i%100 == 0:
 			print("checking", i, "of", length)
-		out_labels[i] = temp.max(1)[1]
-	return(torch.mean((labelsdash[start:start + l].type(torch.cuda.LongTensor)==out_labels.type(torch.cuda.LongTensor)).type(torch.cuda.FloatTensor)))	
+		out_labels[i-start] = temp.max(1)[1]
+	return(torch.mean((labelsdash[:l].type(torch.cuda.LongTensor)==out_labels.type(torch.cuda.LongTensor)).type(torch.cuda.FloatTensor)))	
 
 
 
