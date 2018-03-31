@@ -128,8 +128,7 @@ def loadData():
 def plotData():
 	PlotLoss(avg_loss_values, "avg_loss_values.png")
 	PlotLoss(loss_values, "loss_values.png")
-	PlotLoss(trainAccuracies, "trainAccuracies.png")
-	PlotLoss(valAccuracies, "valAccuracies.png")
+	PlotAccuracies(trainAccuracies, valAccuracies, "accuracies.png")
 
 print("Loaded libraries")
 data = getData()
