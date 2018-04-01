@@ -63,3 +63,11 @@ def PlotLoss(l,name = 'currentLoss.png'):
 	plt.plot(l)			
 	plt.show()
 	plt.savefig(name)
+
+def plotAccuracies(l1, l2, name="accuracies.png"):
+	plt.clf()
+	plt.cla()
+	plt.close()
+	plt.plot(l1, l2)
+	plt.show()
+	plt.savefig(name)
