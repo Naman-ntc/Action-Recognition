@@ -96,12 +96,12 @@ def train(model, num_epoch, epoch_size = -1, batchSize = 5, lr=1e-3,rec_interval
 			optimizer.step()
 			if i % disp_interval == 0:
 				avg_loss/=10.0
-				print('epoch: %d iterations: %d loss :%g' % (eph, i, avg_loss/batchSize))
-				avg_loss_values.append(avg_loss/batchSize)
-				avg_loss = 0.0
 				if i < totalSamples - 60:
 					trainAccuracies.append(checkAcc(model, data, labels, start = batchSize*i, length = 50))
 					valAccuracies.append(checkAcc(model, valData, valLabels, start = (batchSize*i) // 3, length = 50))
+				print('epoch: %d iterations: %d loss: %g trainAcc: %g valAcc: %g' % (eph, i, avg_loss/batchSize, trainAccuracies[-1], valAccuracies[-1]))
+				avg_loss_values.append(avg_loss/batchSize)
+				avg_loss = 0.0
 			if rec_step%rec_interval==0:
 				loss_values.append(totalLoss/batchSize)
 				
