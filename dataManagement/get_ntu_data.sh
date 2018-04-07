@@ -1,7 +1,7 @@
 #!/bin/bash
 
 clear
-mkdir -v datasets
+mkdir -v ../datasets
 cd datasets
 mkdir -v NTU
 cd NTU
