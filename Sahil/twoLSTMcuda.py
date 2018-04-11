@@ -7,17 +7,30 @@ import torch.nn.functional as F
 
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
-def TrainAcc(l = 20):
+def TrainAcc(start = 0, l = 1000):
 	print("The training accuracy is:", )
-	print(checkAcc(model,data,labels, length = l)[0])
+	print(checkAcc(model,data,labels, start = start, length = l)[0])
 
-def ValAcc(l = 1000):
+def ValAcc(start = 0, l = 1000):
 	print("The validation accuracy is:",)
-	print(checkAcc(model, valData, valLabels, length = l)[0])
+	print(checkAcc(model, valData, valLabels,start = start, length = l)[0])
+
+def FullAcc(theData, theLabels):
+	totalLength = len(theData)
+	totalAccuracy = 0
+	for i in range(totalLength//1000):
+		current = checkAcc(model, theData, theLabels, start = i*1000, length = 1000)[0]
+		print(current)
+		totalAccuracy += 1000.0*current
+	current = checkAcc(model, theData, theLabels, start = totalLength - 1000*(totalLength//1000), length = (totalLength % 1000))[0]
+	print(current)
+	totalAccuracy += float(totalLength%1000)*current
+	print("The overall accuracy is: ")
+	print(totalAccuracy/float(totalLength))
 
 class LSTMClassifier(nn.Module):
 
-	def __init__(self, hidden_dim=128, label_size=49, input_dim=75, num_layers = 1):
+	def __init__(self, hidden_dim=256, label_size=49, input_dim=75, num_layers = 1):
 		super(LSTMClassifier, self).__init__()
 		self.hiddenDim = hidden_dim
 		self.layers = num_layers
@@ -117,9 +130,8 @@ print("Loaded validation labels")
 
 #print(labels.size())
 
-model = LSTMClassifier(label_size = 5, num_layers = 3)
+model = LSTMClassifier(num_layers = 2)
 #PlotLoss(loss)
-
 
 
 def Scheduler():
@@ -129,39 +141,32 @@ def Scheduler():
 	loss3 = []
 	loss4 = []
 	loss5 = []
-	#PlotLoss(,'loss1.png')
-	contin = bool(input("Do you want to continue training: "))
 	TrainAcc()
 	ValAcc()
-	if contin:
-		loss0 = train(model,5,batchSize = 16, lr = 1e-4)
+	PlotLoss(loss0)
+	loss0 = train(model,1,batchSize = 16, lr = 1e-4)
+	PlotLoss(loss0)
 	TrainAcc()
 	ValAcc()
-	contin = bool(input("Do you want to continue training: "))
-	if contin:
-		loss1 = train(model,10,batchSize = 16, lr = 3e-5)
 	#PlotLoss(loss1,'loss1.png')
+	loss0 += train(model,1,batchSize = 16, lr = 5e-5)
+	PlotLoss(loss0)
 	TrainAcc()
 	ValAcc()
-	contin = bool(input("Do you want to continue training: "))
-	if contin:
-		loss2 = train(model,10,batchSize = 16,lr = 1e-5)
+	loss0 += train(model,1,batchSize = 16,lr = 2e-5)
+	PlotLoss(loss0)
 	TrainAcc()
 	ValAcc()
-	contin = bool(input("Do you want to continue training: "))
-	if contin:
-		loss3 = train(model,10,batchSize = 16,lr=5e-6)
-	#PlotLoss(loss1+loss2+loss3,'loss2.png')
+	loss0 += train(model,1,batchSize = 16,lr=1e-5)
+	PlotLoss(loss0)
 	TrainAcc()
 	ValAcc()
-	contin = bool(input("Do you want to continue training: "))
-	if contin:
-		loss4 = train(model,20,batchSize = 8,lr = 5e-6)
-	print(checkAcc(model,data,labels, length = -1)[0])
+	loss0 += train(model,20,batchSize = 8,lr = 5e-6)
+	TrainAcc()
 	ValAcc()
-	PlotLoss(loss0 + loss1+loss2+loss3+loss4+loss5)
+	PlotLoss(loss0)
 	#loss5 = train(model0,50,3300,1e-5)
 	#PlotLoss(loss1+loss2+loss3+loss4+loss5,'loss3.png')
 	#TrainAcc()
-
+	return loss0
 

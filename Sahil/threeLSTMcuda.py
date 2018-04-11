@@ -164,4 +164,7 @@ def Scheduler():
 	#PlotLoss(loss1+loss2+loss3+loss4+loss5,'loss3.png')
 	#TrainAcc()
 
+TrainAcc()
+ValAcc()
+train(model, 1, epoch_size = 256, batchSize = 16, lr = 1e-3)
 

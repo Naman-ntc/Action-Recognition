@@ -8,6 +8,10 @@ __pycache__/
 
 datasets
 
+models
+dataManagement/NTU
+NTU
+
 # Distribution / packaging
 .Python
 env/
