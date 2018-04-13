@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import os
 
-from functions import resizeAndPad, playVideoFromArray
+from functions import resizeAndPad, playVideoFromArray, playVideoFromAVI
 
 from ntu_read_skeleton import read_skeleton
 
@@ -44,14 +44,17 @@ for chunk in file:
 	videoList += chunk
 file.close()
 videoList = videoList.split()
-videoList = [x for x in videoList if x[-3:] == 'avi']
+videoList = [x for x in videoList if (x[-3:] == 'avi' and len(x) == 28)]
 
 ##### MADE A LIST OF THE FILES IN THE DIRECTORY
 
 file = open("labels", 'w')
 count = 0
 
-for video in videoList[:10]:
+total = len(videoList)
+
+
+for video in videoList:
 	label = video[video.find('A')+1:video.find('A') + 4]
 	label = int(label) - 1
 	cap = cv2.VideoCapture(video)
@@ -67,26 +70,30 @@ for video in videoList[:10]:
 
 	sideLength = bbox.extend()
 
-	currentVideo = []
+	name = "train" + str(count) + ".avi"
+	outFile = cv2.VideoWriter(name,cv2.VideoWriter_fourcc('M','J','P','G'), 10, (sideLength, sideLength))
+
 
 	while (cap.isOpened()):
 		ret, frame = cap.read()
 		if ret:
 			crop = resizeAndPad(frame[bbox.x1:bbox.x2, bbox.y1:bbox.y2, :], (sideLength, sideLength))
-			currentVideo.append(crop)
+			#currentVideo.append(crop)
+			outFile.write(crop)
 		else:
 			break
 
-	currentVideo = np.asarray(currentVideo)
-	name = str(count) + ".npy"
-	np.save(name,currentVideo)
+	outFile.release()
+
+	#np.save(name,currentVideo)
 
 	file.write(str(count)+","+str(label)+"\n")
 
 	if count%10 == 0:
-		print(count)
+		print(str(count) + " of " + str(total) + " done - " + str(count*100.0/total) + " %")
 	
 	count = count + 1
 
+	#playVideoFromAVI(name)
 #playVideo("S001C001P001R001A001_rgb.avi")
 
