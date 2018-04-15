@@ -55,45 +55,47 @@ total = len(videoList)
 
 
 for video in videoList:
-	label = video[video.find('A')+1:video.find('A') + 4]
-	label = int(label) - 1
-	cap = cv2.VideoCapture(video)
-	bbox = box()
-	skeletonFileName = video[:-8] + ".skeleton"
-	skeleton = read_skeleton(skeletonFileName)
-	for frameNo in range(skeleton['numFrame']):
-		for jointNo in range(skeleton['frameInfo'][frameNo]['bodyInfo'][0]['numJoint']):
-			bbox.x1 = min(bbox.x1, skeleton['frameInfo'][frameNo]['bodyInfo'][0]['jointInfo'][jointNo]['colorY'])
-			bbox.x2 = max(bbox.x2, skeleton['frameInfo'][frameNo]['bodyInfo'][0]['jointInfo'][jointNo]['colorY'])
-			bbox.y1 = min(bbox.y1, skeleton['frameInfo'][frameNo]['bodyInfo'][0]['jointInfo'][jointNo]['colorX'])
-			bbox.y2 = max(bbox.y2, skeleton['frameInfo'][frameNo]['bodyInfo'][0]['jointInfo'][jointNo]['colorX'])
+	try:
+		label = video[video.find('A')+1:video.find('A') + 4]
+		label = int(label) - 1
+		cap = cv2.VideoCapture(video)
+		bbox = box()
+		skeletonFileName = "skeletons/" + video[:-8] + ".skeleton"
+		skeleton = read_skeleton(skeletonFileName)
+		for frameNo in range(skeleton['numFrame']):
+			for jointNo in range(skeleton['frameInfo'][frameNo]['bodyInfo'][0]['numJoint']):
+				bbox.x1 = min(bbox.x1, skeleton['frameInfo'][frameNo]['bodyInfo'][0]['jointInfo'][jointNo]['colorY'])
+				bbox.x2 = max(bbox.x2, skeleton['frameInfo'][frameNo]['bodyInfo'][0]['jointInfo'][jointNo]['colorY'])
+				bbox.y1 = min(bbox.y1, skeleton['frameInfo'][frameNo]['bodyInfo'][0]['jointInfo'][jointNo]['colorX'])
+				bbox.y2 = max(bbox.y2, skeleton['frameInfo'][frameNo]['bodyInfo'][0]['jointInfo'][jointNo]['colorX'])
 
-	sideLength = bbox.extend()
+		sideLength = bbox.extend()
 
-	name = "train" + str(count) + ".avi"
-	outFile = cv2.VideoWriter(name,cv2.VideoWriter_fourcc('M','J','P','G'), 10, (sideLength, sideLength))
+		name = "val" + str(count) + ".avi"
+		outFile = cv2.VideoWriter(name,cv2.VideoWriter_fourcc('M','J','P','G'), 10, (sideLength, sideLength))
 
 
-	while (cap.isOpened()):
-		ret, frame = cap.read()
-		if ret:
-			crop = resizeAndPad(frame[bbox.x1:bbox.x2, bbox.y1:bbox.y2, :], (sideLength, sideLength))
-			#currentVideo.append(crop)
-			outFile.write(crop)
-		else:
-			break
+		while (cap.isOpened()):
+			ret, frame = cap.read()
+			if ret:
+				crop = resizeAndPad(frame[bbox.x1:bbox.x2, bbox.y1:bbox.y2, :], (sideLength, sideLength))
+				#currentVideo.append(crop)
+				outFile.write(crop)
+			else:
+				break
 
-	outFile.release()
+		outFile.release()
 
-	#np.save(name,currentVideo)
+		#np.save(name,currentVideo)
 
-	file.write(str(count)+","+str(label)+"\n")
+		file.write(str(count)+","+str(label)+"\n")
 
-	if count%10 == 0:
-		print(str(count) + " of " + str(total) + " done - " + str(count*100.0/total) + " %")
-	
-	count = count + 1
-
+		if count%10 == 0:
+			print(str(count) + " of " + str(total) + " done - " + str(count*100.0/total) + " %")
+		
+		count = count + 1
+	except:
+		pass
 	#playVideoFromAVI(name)
 #playVideo("S001C001P001R001A001_rgb.avi")
 
