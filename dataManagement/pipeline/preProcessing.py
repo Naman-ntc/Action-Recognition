@@ -96,6 +96,7 @@ for video in videoList:
 		count = count + 1
 	except:
 		pass
+>>>>>>> e4b335503651c5311f3988e6f424e569d90515d6
 	#playVideoFromAVI(name)
 #playVideo("S001C001P001R001A001_rgb.avi")
 
