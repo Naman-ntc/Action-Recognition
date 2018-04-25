@@ -59,7 +59,7 @@ for video in videoList:
 	label = int(label) - 1
 	cap = cv2.VideoCapture(video)
 	bbox = box()
-	skeletonFileName = video[:-8] + ".skeleton"
+	skeletonFileName = "skeletons/" + video[:-8] + ".skeleton"
 	skeleton = read_skeleton(skeletonFileName)
 	for frameNo in range(skeleton['numFrame']):
 		for jointNo in range(skeleton['frameInfo'][frameNo]['bodyInfo'][0]['numJoint']):
