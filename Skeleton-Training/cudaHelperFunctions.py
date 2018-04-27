@@ -6,6 +6,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import torch
 from torch import autograd
+from numpy import genfromtxt
 
 def getData():
 	model = pickle.load(open('../datasets/processedData/lstmProcessedTrainData.npy', 'rb'))
@@ -14,7 +15,7 @@ def getData():
 	return model
 
 def getLabels():
-	labels = np.load('../datasets/processedData/trainLabels.npy')
+	labels = genfromtxt('../datasets/train_labels.csv', delimiter=',')
 	return torch.from_numpy(labels).type(torch.cuda.LongTensor)
 
 
@@ -24,8 +25,8 @@ def getValData():
 		model[i] = model[i].type(torch.cuda.FloatTensor)
 	return model
 
-def getValLabels():
-	labels = np.load('../datasets/processedData/valLabels.npy')
+def getLabels():
+	labels = genfromtxt('../datasets/train_labels.csv', delimiter=',')
 	return torch.from_numpy(labels).type(torch.cuda.LongTensor)
 
 # def checkAcc(model, data, labels):

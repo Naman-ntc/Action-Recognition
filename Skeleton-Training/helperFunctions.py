@@ -6,7 +6,7 @@ import torch
 from torch import autograd
 
 def getData():
-	model = pickle.load(open('../datasets/processedData/lstmProcessedTrainData.npy', 'rb'))
+	model = pickle.load(open('train_data.pkl','rb'))
 	return model[:300]
 
 def getLabels():
