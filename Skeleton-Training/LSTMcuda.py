@@ -18,7 +18,7 @@ def ValAcc():
 
 class LSTMClassifier(nn.Module):
 
-	def __init__(self, hidden_dim=128, label_size=49, input_dim=48, num_layers = 1):
+	def __init__(self, hidden_dim=160, label_size=8, input_dim=48, num_layers = 2):
 		super(LSTMClassifier, self).__init__()
 		self.hiddenDim = hidden_dim
 		self.layers = num_layers
@@ -131,17 +131,17 @@ def plotData():
 	PlotAccuracies(trainAccuracies, valAccuracies, "accuracies.png")
 
 print("Loaded libraries")
-data = getData()
+#data = getData()
 print("Loaded training data")
-labels = getLabels()
+#labels = getLabels()
 print("Loaded training labels")
-valData = getValData()
+#valData = getValData()
 print("Loaded validation data")
-valLabels = getValLabels()
+#valLabels = getValLabels()
 print("Loaded validation labels")
 #labels = torch.from_numpy(labels).view(number,-1).type(torch.cuda.LongTensor)
 
 #print(labels.size())
 
-model = LSTMClassifier(hidden_dim = 160, num_layers = 2, label_size = 7)
+model = LSTMClassifier(hidden_dim = 160, num_layers = 2, label_size = 8)
 #PlotLoss(loss)
