@@ -18,12 +18,12 @@ def ValAcc():
 
 class LSTMClassifier(nn.Module):
 
-	def __init__(self, hidden_dim=128, label_size=49, input_dim=75, num_layers = 1):
+	def __init__(self, hidden_dim=128, label_size=49, input_dim=48, num_layers = 1):
 		super(LSTMClassifier, self).__init__()
 		self.hiddenDim = hidden_dim
 		self.layers = num_layers
-		self.embedding = nn.Linear(input_dim, 64)
-		self.lstm = nn.LSTM(input_size=64, hidden_size=hidden_dim, num_layers = num_layers)
+		self.embedding = nn.Linear(input_dim, 32)
+		self.lstm = nn.LSTM(input_size=32, hidden_size=hidden_dim, num_layers = num_layers)
 		self.fullyConnected = nn.Linear(hidden_dim, label_size)
 		self.hidden = self.init_hidden()
 		
@@ -143,9 +143,5 @@ print("Loaded validation labels")
 
 #print(labels.size())
 
-model = LSTMClassifier(hidden_dim = 512, num_layers = 2, label_size = 49)
+model = LSTMClassifier(hidden_dim = 160, num_layers = 2, label_size = 7)
 #PlotLoss(loss)
-
-
-
-

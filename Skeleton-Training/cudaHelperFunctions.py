@@ -6,32 +6,27 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import torch
 from torch import autograd
-from numpy import genfromtxt
 
 def getData():
-	model = pickle.load(open('../datasets/processedData/lstmProcessedTrainData.npy', 'rb'))
+	model = pickle.load(open('../datasets/trainData.npy', 'rb'))
 	for i in range(len(model)):
 		model[i] = model[i].type(torch.cuda.FloatTensor)
 	return model
 
 def getLabels():
-	labels = genfromtxt('../datasets/train_labels.csv', delimiter=',')
+	labels = np.load('../datasets/trainLabels.npy')
 	return torch.from_numpy(labels).type(torch.cuda.LongTensor)
 
 
 def getValData():
-	model = pickle.load(open('../datasets/processedData/lstmProcessedValData.npy', 'rb'))
+	model = pickle.load(open('../datasets/valData.npy', 'rb'))
 	for i in range(len(model)):
 		model[i] = model[i].type(torch.cuda.FloatTensor)
 	return model
 
-def getLabels():
-	labels = genfromtxt('../datasets/train_labels.csv', delimiter=',')
+def getValLabels():
+	labels = np.load('../datasets/valLabels.npy')
 	return torch.from_numpy(labels).type(torch.cuda.LongTensor)
-
-# def checkAcc(model, data, labels):
-# 	pred = model.predict(data)
-# 	return np.mean(np.argmax(pred,axis=1) == np.argmax(labels,axis=1))
 
 
 
