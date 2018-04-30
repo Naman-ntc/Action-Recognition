@@ -154,5 +154,5 @@ print("Loaded validation labels")
 
 #print(labels.size())
 
-model = LSTMClassifier(hidden_dim = 128, num_layers = 2, label_size = 8)
+model = LSTMClassifier(hidden_dim = 160, num_layers = 2, label_size = 8)
 #PlotLoss(loss)
