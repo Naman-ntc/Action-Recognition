@@ -9,6 +9,12 @@ __pycache__/
 # C extensions
 *.so
 
+datasets
+
+models
+dataManagement/NTU
+NTU
+
 # Distribution / packaging
 .Python
 env/
@@ -102,3 +108,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+toyData
+valData.npy
+valLabels.npy
+trainData.npy
+trainLabels.npy
