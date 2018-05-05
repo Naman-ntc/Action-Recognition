@@ -1,2 +1,0 @@
-four LSTM: after 7 epochs, 3 of 1e-3, 2 on 3e-4, 2 on 1e-4 valAcc = 58.5%, and trainAcc = 69.11%
-after dropping rate till 1e-5, valAcc = 59.7 and trainAcc = 72.5 -- it now seems to have saturated
